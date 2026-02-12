@@ -1,0 +1,144 @@
+--Write a query to fetch the EmpFname from the EmployeeInfo table in the upper case and use the ALIAS name as EmpName.
+SELECT UPPER (EmpFname) AS EmpName
+FROM [dbo].['Employee Info$']
+
+-- Same query but in lower case 
+SELECT LOWER (EmpFname) AS lower_name
+FROM [dbo].['Employee Info$']
+WHERE EmpFname IS NOT NULL
+
+ --Same query but DISTINCT UPPERCASE 
+SELECT DISTINCT (EmpFname) AS Distinct_name
+FROM [dbo].['Employee Info$']
+WHERE EmpFname IS NOT NULL
+
+--Write a query to fetch the number of employees working in the department ‘HR’.
+SELECT COUNT (*) AS HR_EMPLOYEES
+FROM [dbo].['Employee Info$']
+WHERE DEPARTMENT = 'HR'
+
+-- grouping by department
+SELECT COUNT(*) 
+FROM [dbo].['Employee Info$']
+GROUP BY DEPARTMENT
+--Write a query to get the current date.
+SELECT CAST(GETDATE() AS DATE) AS CURRENTDATE
+-- CAST converts a value from one data type to the other.
+SELECT CAST(GETDATE() AS DATE) AS CURRENTDATE
+
+-- SELECT CAST(GETDATE() AS DATE) AS CRNT_DATE --- JUST PRACTISING
+
+-- A query to get current date and TIME
+SELECT GETDATE() AS Current_date_time
+
+--Write a query to retrieve the first four characters of  EmpLname from the EmployeeInfo table.
+SELECT LEFT(EmpLname, 4) AS FST_4
+FROM [dbo].['Employee Info$']
+WHERE EmpLname IS NOT NULL
+
+-- same query but 3 characters from second
+SELECT SUBSTRING(EmpLname, 2, 3) AS second_char
+FROM [dbo].['Employee Info$']
+WHERE EmpLname IS NOT NULL
+
+--MIDDLE 3 CHARACTERS.
+SELECT SUBSTRING(EmpLname, CEILING((LEN(EmpLname) - 3)/2.0) + 1, 3) AS Middle_chars
+FROM [dbo].['Employee Info$']
+-- Substring (used when you want to extract a portionof a string starting at a specific position for a specific length)
+-- CEILING returns a whole number.
+-- last four characters. 
+SELECT RIGHT(EmpLname, 3) AS LST_4
+FROM [dbo].['Employee Info$']
+
+--Write a query to fetch only the place name(string before brackets) from the Address column of EmployeeInfo table.
+SELECT LEFT(Address, CHARINDEX('(',ADDRESS)-1) 
+FROM [dbo].['Employee Info$']
+
+SELECT LEFT(Address, CHARINDEX('(', address)-1) AS [first_name]
+FROM [dbo].['Employee Info$']
+WHERE EmpLname IS NOT NULL
+
+--Write a query to create a new table that consists of data and structure copied from the other table.
+SELECT *
+INTO Employee_info_copy_3
+FROM [dbo].['Employee Info$']
+WHERE EmpFname IS NOT NULL
+
+SELECT * 
+FROM Employee_info_copy_3
+
+--same query but while altering the address to extract name before (
+SELECT 
+	EmpID,
+	EmpFname
+	EmpLname,
+	Department,
+	Project,
+	LEFT(address, CHARINDEX('(', address)-1) as Place_holder,
+	DOB,
+	Gender
+INTO Employee_info_copy_4
+FROM [dbo].['Employee Info$']
+WHERE EmpFname IS NOT NULL
+
+SELECT *
+FROM Employee_info_copy_4
+
+--Write q query to find all the employees whose salary is between 50000 to 100000.
+SELECT *
+FROM [dbo].['Employee position$']
+WHERE SALARY >= 50000 
+AND SALARY <= 100000
+
+--OR 
+SELECT *
+FROM [dbo].['Employee position$']
+WHERE SALARY BETWEEN 50000 AND 100000
+
+--Write a query to find the names of employees that begin with ‘S’
+SELECT EmpFname
+FROM [dbo].['Employee Info$']
+WHERE EmpFname LIKE 's%'
+
+
+
+--both last and first names start with s
+SELECT EmpLname,EmpFname
+FROM [dbo].['Employee Info$']
+WHERE EmpFname LIKE 's%'
+
+-- contains s
+SELECT EmpLname
+FROM [dbo].['Employee Info$']
+WHERE EmpLname LIKE '%s%'
+
+-- starts with s and ends with a
+SELECT EmpFname
+FROM [dbo].['Employee Info$'] 
+WHERE EmpFname LIKE 's%a'
+
+---matches exactly one character 
+s_____
+SELECT EmpFname
+FROM [dbo].['Employee Info$']
+WHERE EmpFname like 's____'
+--_a% - second letter is a
+--[SM]% - starts with S or M
+--[A-C] - starts with A, B OR C.
+--%[0-9] - ends with a number
+--[^s] does not start with s.
+--%s%s% - two s s
+--%sa% - containing sa.
+-- %son - ending wth son.
+--[aeiou]% -- starts with a vowel 
+
+
+--Write a query to fetch top N records-- 
+
+SELECT TOP 3 *
+FROM[dbo].['Employee position$']
+
+
+--Write a query to retrieve the EmpFname and EmpLname in a single column as “FullName”. The first name and the last name must be separated with space.
+SELECT EmpFname + ' ' + EmpLname AS FULL_NAME
+FROM [dbo].['Employee Info$']
